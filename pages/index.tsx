@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { Button } from '../components/ui/button';
