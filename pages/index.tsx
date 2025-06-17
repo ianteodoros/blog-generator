@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Head from 'next/head';
-import { Button } from '@/components/ui/button';
-
+import { Button } from '../components/ui/button';
 export default function Home() {
   const [theme, setTheme] = useState('');
   const [tone, setTone] = useState('formal');
