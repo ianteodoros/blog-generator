@@ -7,7 +7,6 @@ export default function Home() {
   const [language, setLanguage] = useState('RO');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
-// redeploy trigger
   const handleSubmit = async () => {
     setLoading(true);
     const response = await fetch('/api/generate', {
