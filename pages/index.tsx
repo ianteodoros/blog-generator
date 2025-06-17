@@ -18,7 +18,7 @@ export default function Home() {
     setContent(data.content);
     setLoading(false);
   };
-
+console.log('Forțare redeploy');
   return (
     <>
       <Head>
