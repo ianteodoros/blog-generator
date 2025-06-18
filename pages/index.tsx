@@ -28,37 +28,8 @@ export default function Home() {
       </Head>
       <main className="p-4 max-w-2xl mx-auto">
         <h1 className="text-2xl font-bold mb-4">Generator de conținut pentru blog</h1>
+
         <input
           placeholder="Tema articolului"
           className="border p-2 w-full mb-2"
-          value={theme}
-          onChange={(e) => setTheme(e.target.value)}
-        />
-        <select
-          className="border p-2 w-full mb-2"
-          value={tone}
-          onChange={(e) => setTone(e.target.value)}
-        >
-          <option value="formal">Formal</option>
-          <option value="informal">Informal</option>
-        </select>
-        <select
-          className="border p-2 w-full mb-2"
-          value={language}
-          onChange={(e) => setLanguage(e.target.value)}
-        >
-          <option value="RO">Română</option>
-          <option value="EN">Engleză</option>
-        </select>
-        <Button onClick={handleSubmit} disabled={loading}>
-          {loading ? 'Se generează...' : 'Generează articolul'}
-        </Button>
-        {content && (
-          <div className="mt-4 whitespace-pre-wrap border p-4 bg-gray-100 rounded">
-            {content}
-          </div>
-        )}
-      </main>
-    </>
-  );
-}
+          val
