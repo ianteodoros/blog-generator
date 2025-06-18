@@ -1,11 +1,14 @@
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { Button } from '../components/ui/button';
+
 export default function Home() {
   const [theme, setTheme] = useState('');
   const [tone, setTone] = useState('formal');
   const [language, setLanguage] = useState('RO');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
+
   const handleSubmit = async () => {
     setLoading(true);
     const response = await fetch('/api/generate', {
@@ -17,7 +20,7 @@ export default function Home() {
     setContent(data.content);
     setLoading(false);
   };
-console.log('Forțare redeploy');
+
   return (
     <>
       <Head>
@@ -25,21 +28,36 @@ console.log('Forțare redeploy');
       </Head>
       <main className="p-4 max-w-2xl mx-auto">
         <h1 className="text-2xl font-bold mb-4">Generator de conținut pentru blog</h1>
-        <input placeholder="Tema articolului" className="border p-2 w-full mb-2" value={theme} onChange={e => setTheme(e.target.value)} />
-        <select value={tone} onChange={e => setTone(e.target.value)} className="border p-2 w-full mb-2">
+        <input
+          placeholder="Tema articolului"
+          className="border p-2 w-full mb-2"
+          value={theme}
+          onChange={(e) => setTheme(e.target.value)}
+        />
+        <select
+          className="border p-2 w-full mb-2"
+          value={tone}
+          onChange={(e) => setTone(e.target.value)}
+        >
           <option value="formal">Formal</option>
-          <option value="amuzant">Amuzant</option>
-          <option value="persuasiv">Persuasiv</option>
+          <option value="informal">Informal</option>
         </select>
-        <select value={language} onChange={e => setLanguage(e.target.value)} className="border p-2 w-full mb-2">
+        <select
+          className="border p-2 w-full mb-2"
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+        >
           <option value="RO">Română</option>
           <option value="EN">Engleză</option>
-          <option value="FR">Franceză</option>
         </select>
-        <Button onClick={handleSubmit} disabled={loading}>{loading ? 'Generează...' : 'Generează articolul'}</Button>
-        <div className="mt-4 whitespace-pre-wrap border p-4 bg-gray-100 rounded-xl">
-          {content}
-        </div>
+        <Button onClick={handleSubmit} disabled={loading}>
+          {loading ? 'Se generează...' : 'Generează articolul'}
+        </Button>
+        {content && (
+          <div className="mt-4 whitespace-pre-wrap border p-4 bg-gray-100 rounded">
+            {content}
+          </div>
+        )}
       </main>
     </>
   );
