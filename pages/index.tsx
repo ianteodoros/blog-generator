@@ -1,19 +1,17 @@
+// pages/index.tsx – UI dark‑mode + Stripe abonament
 import { useState } from 'react';
 import Head from 'next/head';
 
 export default function Home() {
+  /* ------------ state -------------- */
   const [theme, setTheme]       = useState('');
   const [tone, setTone]         = useState('formal');
   const [language, setLanguage] = useState('RO');
   const [content, setContent]   = useState('');
   const [loading, setLoading]   = useState(false);
+  const [stripeLoad, setStripe] = useState(false);
 
-  // abonare
-  const [email, setEmail]       = useState('');
-  const [subscribed, setSub]    = useState(false);
-  const [subErr, setSubErr]     = useState('');
-
-  /*------------------  GENERATE  ------------------*/
+  /* ------------ generate article -------------- */
   const handleGenerate = async () => {
     if (!theme.trim()) return;
     setLoading(true);
@@ -25,26 +23,23 @@ export default function Home() {
         body: JSON.stringify({ theme, tone, language }),
       });
       const data = await r.json();
-      setContent(data.content || '- Nu s-a generat conținut -');
-    } catch (e) {
+      setContent(data.content || '- nu s-a generat text -');
+    } catch {
       setContent('Eroare la generare.');
     }
     setLoading(false);
   };
 
-  /*------------------  SUBSCRIBE  ------------------*/
-  const handleSubscribe = async () => {
-    if (!email.trim()) return;
+  /* ------------ stripe subscribe -------------- */
+  const handleStripe = async () => {
+    if (stripeLoad) return;
+    setStripe(true);
     try {
-      const r = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-      if (r.ok) setSub(true);
-      else throw new Error('Fail');
-    } catch (e) {
-      setSubErr('Eroare la abonare.');
+      const { url } = await fetch('/api/subscribe', { method: 'POST' }).then(r => r.json());
+      window.location.href = url;
+    } catch {
+      alert('Eroare Stripe');
+      setStripe(false);
     }
   };
 
@@ -52,24 +47,16 @@ export default function Home() {
     <>
       <Head>
         <title>Generator de conținut – AI Blog</title>
-        <meta
-          name="description"
-          content="Generează instant articole de blog în limba și tonul dorit."
-        />
+        <meta name="description" content="Generează instant articole de blog cu AI" />
         <meta property="og:title" content="Generator de conținut – AI Blog" />
-        <meta
-          property="og:description"
-          content="Generează instant articole de blog în limba și tonul dorit."
-        />
+        <meta property="og:description" content="Generează instant articole de blog cu AI" />
       </Head>
 
       <main className="min-h-screen bg-zinc-900 text-white p-6 flex flex-col items-center">
         <section className="w-full max-w-3xl space-y-6">
-          <h1 className="text-3xl font-bold text-center">
-            Generator de conținut pentru blog
-          </h1>
+          <h1 className="text-3xl font-bold text-center">Generator de conținut pentru blog</h1>
 
-          {/* FORM INPUTS */}
+          {/* INPUTS */}
           <div className="space-y-4">
             <input
               className="w-full bg-zinc-800 border border-zinc-700 p-2 rounded"
@@ -105,7 +92,7 @@ export default function Home() {
                 disabled={loading}
                 className="bg-indigo-600 hover:bg-indigo-700 disabled:bg-zinc-700 p-2 rounded"
               >
-                {loading ? 'Se generează…' : 'Generează articolul'}
+                {loading ? 'Se generează…' : 'Generează articol'}
               </button>
             </div>
           </div>
@@ -117,34 +104,16 @@ export default function Home() {
             </article>
           )}
 
-          {/* SUBSCRIBE */}
-          {!subscribed && (
-            <div className="bg-zinc-800 p-4 rounded border border-zinc-700 space-y-2">
-              <p className="font-semibold">Primește noutăți pe email:</p>
-              <div className="flex gap-2">
-                <input
-                  type="email"
-                  className="flex-grow bg-zinc-900 border border-zinc-700 p-2 rounded"
-                  placeholder="Email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                />
-                <button
-                  onClick={handleSubscribe}
-                  className="bg-green-600 hover:bg-green-700 p-2 rounded"
-                >
-                  Abonează-te
-                </button>
-              </div>
-              {subErr && <p className="text-red-400 text-sm">{subErr}</p>}
-            </div>
-          )}
-
-          {subscribed && (
-            <p className="text-green-400 font-medium">
-              Mulțumim, te-ai abonat!
-            </p>
-          )}
+          {/* STRIPE SUBSCRIBE */}
+          <div className="text-center pt-8">
+            <button
+              onClick={handleStripe}
+              className="bg-green-600 hover:bg-green-700 p-3 rounded font-semibold disabled:bg-zinc-700"
+              disabled={stripeLoad}
+            >
+              {stripeLoad ? 'Se deschide Stripe…' : 'Abonează‑te – 5 € / lună'}
+            </button>
+          </div>
         </section>
       </main>
     </>
