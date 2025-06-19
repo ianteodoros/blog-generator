@@ -1,9 +1,7 @@
-// pages/index.tsx – UI dark‑mode + Stripe abonament
 import { useState } from 'react';
 import Head from 'next/head';
 
 export default function Home() {
-  /* ------------ state -------------- */
   const [theme, setTheme]       = useState('');
   const [tone, setTone]         = useState('formal');
   const [language, setLanguage] = useState('RO');
@@ -11,7 +9,6 @@ export default function Home() {
   const [loading, setLoading]   = useState(false);
   const [stripeLoad, setStripe] = useState(false);
 
-  /* ------------ generate article -------------- */
   const handleGenerate = async () => {
     if (!theme.trim()) return;
     setLoading(true);
@@ -30,7 +27,6 @@ export default function Home() {
     setLoading(false);
   };
 
-  /* ------------ stripe subscribe -------------- */
   const handleStripe = async () => {
     if (stripeLoad) return;
     setStripe(true);
@@ -52,7 +48,7 @@ export default function Home() {
         <meta property="og:description" content="Generează instant articole de blog cu AI" />
       </Head>
 
-      <main className="min-h-screen bg-zinc-900 text-white p-6 flex flex-col items-center">
+      <main className="min-h-screen flex flex-col items-center p-6">
         <section className="w-full max-w-3xl space-y-6">
           <h1 className="text-3xl font-bold text-center">Generator de conținut pentru blog</h1>
 
@@ -104,14 +100,14 @@ export default function Home() {
             </article>
           )}
 
-          {/* STRIPE SUBSCRIBE */}
+          {/* STRIPE SUBSCRIBE BUTTON */}
           <div className="text-center pt-8">
             <button
               onClick={handleStripe}
               className="bg-green-600 hover:bg-green-700 p-3 rounded font-semibold disabled:bg-zinc-700"
               disabled={stripeLoad}
             >
-              {stripeLoad ? 'Se deschide Stripe…' : 'Abonează‑te – 5 € / lună'}
+              {stripeLoad ? 'Se deschide Stripe…' : 'Abonează-te – 5 € / lună'}
             </button>
           </div>
         </section>
