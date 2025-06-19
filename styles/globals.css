@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* font implicit */
+body {
+  @apply bg-zinc-900 text-white;
+}
